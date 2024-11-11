@@ -1,0 +1,2 @@
+model:
+  segmentation_path: "data/pretrain_models/signet.pth"
