@@ -14,47 +14,39 @@
       <h1>Signature Comparison</h1>
 
       <form id="uploadForm">
-        <label for="image1">Upload Image 1:</label>
-        <input
-          type="file"
-          id="image1"
-          name="image1"
-          accept="image/*"
-          required
-        />
-        <br /><br />
+        <div class="upload-group">
+          <label for="image1">Upload Image 1:</label>
+          <input
+            type="file"
+            id="image1"
+            name="image1"
+            accept="image/*"
+            required
+          />
+        </div>
 
-        <label for="image2">Upload Image 2:</label>
-        <input
-          type="file"
-          id="image2"
-          name="image2"
-          accept="image/*"
-          required
-        />
-        <br /><br />
+        <div class="upload-group">
+          <label for="image2">Upload Image 2:</label>
+          <input
+            type="file"
+            id="image2"
+            name="image2"
+            accept="image/*"
+            required
+          />
+        </div>
 
         <button type="submit">Compare Signatures</button>
       </form>
 
-      <h3>Preview</h3>
-      <div class="preview">
-        <img
-          id="imgPreview1"
-          src=""
-          alt="Image 1 Preview"
-          style="display: none"
-        />
-        <img
-          id="imgPreview2"
-          src=""
-          alt="Image 2 Preview"
-          style="display: none"
-        />
+      <h3 style="display: none" id="previewTitle">Preview</h3>
+      <div class="preview" id="previewSection" style="display: none">
+        <img id="imgPreview1" src="" alt="Image 1 Preview" />
+        <img id="imgPreview2" src="" alt="Image 2 Preview" />
       </div>
 
-      <h3>Prediction Result</h3>
-      <div id="result"></div>
+      <h3 style="display: none" id="resultTitle">Prediction Result</h3>
+      <div id="result" style="display: none"></div>
     </div>
 
     <script>
@@ -73,10 +65,14 @@
 
       document.getElementById("image1").onchange = function () {
         previewImage(this, "imgPreview1");
+        document.getElementById("previewTitle").style.display = "block";
+        document.getElementById("previewSection").style.display = "flex";
       };
 
       document.getElementById("image2").onchange = function () {
         previewImage(this, "imgPreview2");
+        document.getElementById("previewTitle").style.display = "block";
+        document.getElementById("previewSection").style.display = "flex";
       };
 
       document.getElementById("uploadForm").onsubmit = async function (event) {
@@ -92,12 +88,17 @@
 
         const resultDiv = document.getElementById("result");
         resultDiv.innerHTML = ""; // Clear previous result
+
         if (response.ok) {
           const data = await response.json();
           resultDiv.innerHTML = `<p>${data.prediction}</p>`;
+          document.getElementById("resultTitle").style.display = "block";
+          document.getElementById("result").style.display = "block";
         } else {
           const error = await response.json();
           resultDiv.innerHTML = `<p style="color: red;">Error: ${error.error}</p>`;
+          document.getElementById("resultTitle").style.display = "block";
+          document.getElementById("result").style.display = "block";
         }
       };
     </script>
