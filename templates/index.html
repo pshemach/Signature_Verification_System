@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Signature Comparison</title>
+    <link
+      rel="stylesheet"
+      href="{{ url_for('static', filename='style.css') }}"
+    />
+  </head>
+  <body>
+    <div class="container">
+      <h1>Signature Comparison</h1>
+
+      <form id="uploadForm">
+        <label for="image1">Upload Image 1:</label>
+        <input
+          type="file"
+          id="image1"
+          name="image1"
+          accept="image/*"
+          required
+        />
+        <br /><br />
+
+        <label for="image2">Upload Image 2:</label>
+        <input
+          type="file"
+          id="image2"
+          name="image2"
+          accept="image/*"
+          required
+        />
+        <br /><br />
+
+        <button type="submit">Compare Signatures</button>
+      </form>
+
+      <h3>Preview</h3>
+      <div class="preview">
+        <img
+          id="imgPreview1"
+          src=""
+          alt="Image 1 Preview"
+          style="display: none"
+        />
+        <img
+          id="imgPreview2"
+          src=""
+          alt="Image 2 Preview"
+          style="display: none"
+        />
+      </div>
+
+      <h3>Prediction Result</h3>
+      <div id="result"></div>
+    </div>
+
+    <script>
+      // Function to preview image using FileReader
+      function previewImage(input, previewElementId) {
+        const file = input.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = function (e) {
+            document.getElementById(previewElementId).src = e.target.result;
+            document.getElementById(previewElementId).style.display = "block";
+          };
+          reader.readAsDataURL(file);
+        }
+      }
+
+      document.getElementById("image1").onchange = function () {
+        previewImage(this, "imgPreview1");
+      };
+
+      document.getElementById("image2").onchange = function () {
+        previewImage(this, "imgPreview2");
+      };
+
+      document.getElementById("uploadForm").onsubmit = async function (event) {
+        event.preventDefault();
+        const formData = new FormData();
+        formData.append("image1", document.getElementById("image1").files[0]);
+        formData.append("image2", document.getElementById("image2").files[0]);
+
+        const response = await fetch("/predict", {
+          method: "POST",
+          body: formData,
+        });
+
+        const resultDiv = document.getElementById("result");
+        resultDiv.innerHTML = ""; // Clear previous result
+        if (response.ok) {
+          const data = await response.json();
+          resultDiv.innerHTML = `<p>${data.prediction}</p>`;
+        } else {
+          const error = await response.json();
+          resultDiv.innerHTML = `<p style="color: red;">Error: ${error.error}</p>`;
+        }
+      };
+    </script>
+  </body>
+</html>

@@ -27,7 +27,6 @@ def load_image(image_path):
 
 
 def load_signature(path):
-    path = os.path.join(HOME, path)
     return img_as_ubyte(imread(path, as_gray=True))
 
 
