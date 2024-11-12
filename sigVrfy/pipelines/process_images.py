@@ -1,6 +1,4 @@
 import torch
-from skimage.io import imread
-from skimage import img_as_ubyte
 from sigVrfy.utils.normalize_image import preprocess_signature
 from sigVrfy.utils.general import load_config, load_signature
 from sigVrfy.models.signet import SigNet
