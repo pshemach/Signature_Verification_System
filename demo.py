@@ -1,8 +1,10 @@
-from flask import Flask, render_template, request, jsonify
-from sigVrfy.utils.general import is_allowed
-from sigVrfy.pipelines.process_images import compare_signatures
-from werkzeug.utils import secure_filename
 import os
+from flask import Flask, render_template, request, jsonify
+from sigVrfy.utils.general import is_allowed, make_dir
+from sigVrfy.pipelines.process_images import compare_signatures
+from sigVrfy.constant import UPLOAD_FOLDER
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 app.config["UPLOAD_FOLDER"] = "static/uploads"
@@ -67,4 +69,5 @@ def predict():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5056, debug=True)
+    make_dir(UPLOAD_FOLDER)
+    app.run(host="0.0.0.0", port="5057", debug=True)
