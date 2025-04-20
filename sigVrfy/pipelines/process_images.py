@@ -34,7 +34,7 @@ def compare_signatures(images_path, canvas_size=CANVAS_SIZE):
     distance = torch.norm(user_features[0] - user_features[1])
     print(f"Euclidean distance between signatures from the same user: {distance}")
 
-    if distance < 15.5:
+    if distance < 10.5:
         return "Original"
     else:
         return "Forged"
